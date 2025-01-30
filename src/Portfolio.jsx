@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  User, Mail, Linkedin, Phone, Code, Database, BarChart, FileText, Zap, ChevronDown,ChevronUp,
-  Download, Send, ChevronRight, ChevronLeft, MapPin, Circle, MessageSquare, X, Bot,
-  Home, Target, Calendar, CheckCircle, ArrowRight, ExternalLink, Clock, Users, GitBranch,Package,Award
-
+  User, Mail, Linkedin, Phone, Code, Database, BarChart, FileText, Zap,
+  Download, Send, ChevronRight, ChevronLeft, MapPin, Circle, MessageSquare, X,
+  Bot, Home, Target, Calendar, CheckCircle, ArrowRight, ExternalLink, Clock,
+  Users, GitBranch, Package, Award, Sun, Moon, ChevronDown, ChevronUp
 } from 'lucide-react';
 
 
 const PROFILE = {
-  name: 'Antoine Tirard le boss',
+  name: 'Antoine Tirard',
   title: 'Data Analyst',
   email: 'tirardantoine@yahoo.fr',
   phone: '+33 6 73 21 74 34',
@@ -20,46 +20,52 @@ const PROFILE = {
 // Composant Profil
 const ProfileSidebar = () => {
   return (
-    <div className="fixed left-0 top-0 w-1/3 h-full bg-gradient-to-b from-blue-50 flex items-center justify-center shadow-[5px_0_5px_-5px_rgba(0,0,0,0.1)]">
-      <div className="text-center ">
-        <img 
-          src={PROFILE.photo} 
-          alt={PROFILE.name} 
-          className="rounded-full w-48 h-48 object-cover mb-6 mx-auto shadow-lg"
-        />
-        <h1 className="text-3xl font-bold text-gray-800">{PROFILE.name}</h1>
-        <p className="text-xl text-gray-600 mb-2">{PROFILE.title}</p>
-        
-        {/* Localisation */}
-        <p className="text-gray-600 mb-2 flex justify-center items-center">
-          <MapPin size={16} className="mr-2" /> France
-        </p>
-        
-        {/* Availability status */}
-        <div className="flex justify-center items-center space-x-2 mb-6">
-          <div className="relative inline-flex items-center justify-center">
-            <span className="absolute animate-ping w-3 h-3 rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+    <div className="fixed left-0 top-0 w-1/3 h-full bg-gradient-to-b from-blue-50 dark:from-blue-900 
+                    to-white dark:to-gray-900 flex flex-col transition-colors duration-200">
+      <div className="flex-grow flex items-center justify-center">
+        <div className="text-center">
+          <img 
+            src={PROFILE.photo} 
+            alt={PROFILE.name} 
+            className="rounded-full w-48 h-48 object-cover mb-6 mx-auto shadow-lg"
+          />
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{PROFILE.name}</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-2">{PROFILE.title}</p>
+          
+          <p className="text-gray-600 dark:text-gray-400 mb-2 flex justify-center items-center">
+            <MapPin size={16} className="mr-2" /> France
+          </p>
+          
+          <div className="flex justify-center items-center space-x-2 mb-6">
+            <div className="relative inline-flex items-center justify-center">
+              <span className="absolute animate-ping w-3 h-3 rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </div>
+            <p className="text-sm text-green-600 dark:text-green-400">Disponible</p>
           </div>
-          <p className="text-sm text-green-600">Disponible</p>
+          
+          <div className="flex justify-center space-x-4 mb-2">
+            <a href={`mailto:${PROFILE.email}`} className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors">
+              <Mail size={24} />
+            </a>
+            <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors">
+              <Linkedin size={24} />
+            </a>
+            <a href={`tel:${PROFILE.phone}`} className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors">
+              <Phone size={24} />
+            </a>
+          </div>
         </div>
-        
-        {/* Contact icons */}
-        <div className="flex justify-center space-x-4 mb-2">
-          <a href={`mailto:${PROFILE.email}`} className="text-blue-500 hover:text-blue-600 transition-colors">
-            <Mail size={24} />
-          </a>
-          <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
-            <Linkedin size={24} />
-          </a>
-          <a href={`tel:${PROFILE.phone}`} className="text-blue-500 hover:text-blue-600 transition-colors">
-            <Phone size={24} />
-          </a>
-        </div>
+      </div>
+      
+      <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+        © {new Date().getFullYear()}. Tous droits réservés.
       </div>
     </div>
   );
 };
+
+
 
 const PROJECTS = [
   {
@@ -428,13 +434,17 @@ const PROJECTS = [
 const Projects = ({ onProjectClick }) => {
   return (
     <div>
-      <h3 className="text-3xl font-bold mb-8 border-b-2 border-gray-200 pb-3">Mes Projets</h3>
+      <h3 className="text-3xl font-bold mb-8 border-b-2 border-gray-200 dark:border-gray-700 pb-3 
+                     text-gray-800 dark:text-white">
+        Mes Projets
+      </h3>
       <div className="grid md:grid-cols-2 gap-6">
         {PROJECTS.map(project => (
           <div 
             onClick={() => onProjectClick(project)}
             key={project.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-2 cursor-pointer"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden 
+                       hover:shadow-xl transition-all transform hover:-translate-y-2 cursor-pointer"
           >
             <img 
               src={project.image} 
@@ -442,13 +452,18 @@ const Projects = ({ onProjectClick }) => {
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
-              <h3 className="font-bold text-xl mb-2">{project.title}</h3>
-              <p className="text-gray-600 mb-4">{project.shortDescription}</p>
+              <h3 className="font-bold text-xl mb-2 text-gray-800 dark:text-white">
+                {project.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                {project.shortDescription}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech, index) => (
                   <span 
                     key={index} 
-                    className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs"
+                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 
+                             px-2 py-1 rounded-full text-xs"
                   >
                     {tech}
                   </span>
@@ -461,7 +476,6 @@ const Projects = ({ onProjectClick }) => {
     </div>
   );
 };
-
 // Composant Compétences
 const Skills = () => {
   const skillCategories = [
@@ -546,51 +560,42 @@ const Skills = () => {
 
   return (
     <div className="space-y-8">
-<div>
-  <h3 className="text-3xl font-bold mb-2 border-b-2 border-gray-200 pb-3">Compétences & Expertise</h3>
-</div>
-      {/* Skills Grid */}
+      <div>
+        <h3 className="text-3xl font-bold mb-2 border-b-2 border-gray-200 dark:border-gray-700 pb-3 
+                       text-gray-800 dark:text-white">
+          Compétences & Expertise
+        </h3>
+      </div>
       <div className="grid grid-cols-2 gap-6">
         {skillCategories.map((category, idx) => (
-          <div key={idx} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+          <div key={idx} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 
+                                  hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-lg bg-gray-50 text-blue-500">
+              <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-blue-500 dark:text-blue-400">
                 {category.icon}
               </div>
-              <h4 className="font-semibold text-lg">{category.name}</h4>
+              <h4 className="font-semibold text-lg text-gray-800 dark:text-white">{category.name}</h4>
             </div>
             
             <div className="space-y-4">
-              {/* Technologies principales */}
               <div className="flex flex-wrap gap-2">
                 {category.primaryTools.map((tool, i) => (
-                  <span key={i} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
+                  <span key={i} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 
+                                         text-gray-700 dark:text-gray-300 rounded-full text-sm">
                     {tool}
                   </span>
                 ))}
               </div>
 
-              {/* Réalisations clés */}
               <div className="space-y-2">
-                <h5 className="font-medium text-sm text-gray-600">Réalisations clés :</h5>
+                <h5 className="font-medium text-sm text-gray-600 dark:text-gray-400">
+                  Réalisations clés :
+                </h5>
                 <ul className="text-sm space-y-1">
                   {category.keyAchievements.map((achievement, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>
-                      <span>{achievement}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Projets récents */}
-              <div className="space-y-2">
-                <h5 className="font-medium text-sm text-gray-600">Projets récents :</h5>
-                <ul className="text-sm space-y-1">
-                  {category.recentProjects.map((project, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 flex-shrink-0"></span>
-                      <span>{project}</span>
+                      <span className="text-gray-600 dark:text-gray-300">{achievement}</span>
                     </li>
                   ))}
                 </ul>
@@ -599,42 +604,39 @@ const Skills = () => {
           </div>
         ))}
       </div>
-
-      {/* Certifications */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Award className="text-yellow-500" />
-          <h4 className="font-semibold text-lg">Certifications</h4>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          {certifications.map((cert, idx) => (
-            <div key={idx} className="p-4 rounded-lg border border-gray-200 flex items-start gap-3 hover:bg-gray-50 transition-colors">
-              <img src={cert.logo} alt={cert.issuer} className="w-8 h-8 rounded" />
-              <div className="flex-grow">
-                <h5 className="font-medium text-sm">{cert.name}</h5>
-                <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                  <span>{cert.issuer}</span>
-                  <span>•</span>
-                  <span>{cert.date}</span>
-                </div>
-              </div>
-              <a 
-                href={cert.verificationUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:text-blue-600"
-              >
-                <ExternalLink size={16} />
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
 
+// ThemeProvider Component
+const ThemeProvider = ({ children }) => {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setIsDark(true);
+    }
+    document.documentElement.classList.toggle('dark', isDark);
+  }, [isDark]);
+
+  return (
+    <div className={`${isDark ? 'dark' : ''}`}>
+      <button
+        onClick={() => setIsDark(!isDark)}
+        className="fixed top-6 right-6 z-50 p-2 rounded-full bg-gray-100 dark:bg-gray-800 
+                 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        aria-label="Toggle theme"
+      >
+        {isDark ? (
+          <Sun className="w-5 h-5 text-yellow-500" />
+        ) : (
+          <Moon className="w-5 h-5 text-gray-600" />
+        )}
+      </button>
+      {children}
+    </div>
+  );
+};
 
 // Page de détail du projet
 const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
@@ -951,196 +953,196 @@ Formation solide en data science et statistiques`
     }
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      const initialMessage = {
-        id: 0,
-        type: 'bot',
-        text: 'Bonjour! Voici quelques questions suggérées, ou posez-moi directement votre question :',
-        withDelay: false
-      };
-      setMessages([
-        initialMessage,
-        { type: 'suggestion', questions: PREDEFINED_QA }
-      ]);
-    } else {
-      setMessages([]);
-      setRemainingQuestions(PREDEFINED_QA);
-    }
-  }, [isOpen]);
+ // Animations pour les messages
+ const fadeIn = "animate-[fadeIn_0.3s_ease-in-out]";
+ const slideIn = "animate-[slideIn_0.3s_ease-in-out]";
 
-  useEffect(() => {
-    if (isOpen) {
-      const initialMessage = {
-        id: 0,
-        type: 'bot',
-        text: 'Bonjour! Je suis là pour répondre à vos questions sur mon profil et mes compétences.',
-        withDelay: false
-      };
-      setMessages([initialMessage]);
-    } else {
-      setMessages([]);
-      setRemainingQuestions(PREDEFINED_QA);
-      setSuggestionsVisible(true);
-    }
-  }, [isOpen]);
+ useEffect(() => {
+   if (isOpen) {
+     const initialMessage = {
+       type: 'bot',
+       text: "👋 Bonjour ! Je suis l'assistant virtuel d'Antoine. Comment puis-je vous aider aujourd'hui ?",
+     };
+     setMessages([initialMessage]);
+   } else {
+     setMessages([]);
+     setRemainingQuestions(PREDEFINED_QA);
+     setSuggestionsVisible(true);
+   }
+ }, [isOpen]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, suggestionsVisible]);
+ useEffect(() => {
+   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+ }, [messages, suggestionsVisible]);
 
-  const handleQuestionClick = async (question, answer, id) => {
-    setSuggestionsVisible(false);
-    setMessages(prev => [
-      ...prev,
-      { type: 'user', text: question, withDelay: false },
-      { type: 'bot', text: answer, withDelay: true }
-    ]);
-    setRemainingQuestions(prev => prev.filter(q => q.id !== id));
-  };
+ const handleQuestionClick = async (question, answer, id) => {
+   setSuggestionsVisible(false);
+   setMessages(prev => [
+     ...prev,
+     { type: 'user', text: question },
+     { type: 'bot', text: answer }
+   ]);
+   setRemainingQuestions(prev => prev.filter(q => q.id !== id));
+ };
 
-  const handleUserInput = async () => {
-    if (userInput.trim() === '') return;
+ const handleUserInput = async () => {
+   if (userInput.trim() === '') return;
 
-    setSuggestionsVisible(false);
-    setMessages(prev => [...prev, { type: 'user', text: userInput, withDelay: false }]);
-    setIsTyping(true);
-    
-    try {
-      const aiResponse = await callOpenAI(userInput);
-      setMessages(prev => [
-        ...prev,
-        { type: 'bot', text: aiResponse, withDelay: true, aiGenerated: true }
-      ]);
-    } catch (error) {
-      console.error('Erreur:', error);
-    } finally {
-      setIsTyping(false);
-      setUserInput('');
-    }
-  };
+   setSuggestionsVisible(false);
+   setMessages(prev => [...prev, { type: 'user', text: userInput }]);
+   setIsTyping(true);
+   
+   try {
+     const aiResponse = await callOpenAI(userInput);
+     setMessages(prev => [...prev, { type: 'bot', text: aiResponse }]);
+   } catch (error) {
+     console.error('Erreur:', error);
+   } finally {
+     setIsTyping(false);
+     setUserInput('');
+   }
+ };
 
-  const TypingIndicator = () => (
-    <div className="flex items-center space-x-1 bg-gray-100 p-2 rounded-lg self-start">
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-100"></div>
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-200"></div>
-    </div>
-  );
+ const TypingIndicator = () => (
+   <div className="flex space-x-2 p-3 bg-gray-100 rounded-lg max-w-[200px]">
+     <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0s" }} />
+     <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+     <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }} />
+   </div>
+ );
 
-  return (
-    <div className="fixed bottom-4 right-4 z-50">
-      <div className={`
-        relative transition-all duration-300 ease-in-out
-        ${isOpen ? 'w-[380px] h-[500px]' : 'w-14 h-14'}
-      `}>
-        {/* Bouton chatbot fermé */}
-        {!isOpen && (
-          <button 
-            onClick={() => setIsOpen(true)}
-            className="absolute bottom-0 right-0 bg-blue-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 transition-colors"
-          >
-            <MessageSquare className="w-6 h-6" />
-          </button>
-        )}
+ return (
+   <div className="fixed bottom-6 right-6 z-50">
+     <div className={`
+       transform transition-all duration-300 ease-in-out
+       ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}
+       ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}
+     `}>
+       {isOpen && (
+         <div className="w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+           {/* Header */}
+           <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 flex items-center justify-between">
+             <div className="flex items-center space-x-3">
+               <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+                 <Bot className="w-6 h-6 text-white" />
+               </div>
+               <div>
+                 <h3 className="text-white font-semibold">Assistant IA</h3>
+                 <p className="text-blue-100 text-xs">Propulsé par GPT-4</p>
+               </div>
+             </div>
+             <button 
+               onClick={() => setIsOpen(false)}
+               className="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+             >
+               <X className="w-5 h-5" />
+             </button>
+           </div>
 
-        {/* Chatbot ouvert */}
-        {isOpen && (
-          <div className="absolute bottom-0 right-0 w-full h-full bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 flex justify-between items-center">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Bot className="w-5 h-5" />
-                  <h3 className="font-bold text-sm">Assistant IA</h3>
-                </div>
-                <p className="text-xs text-blue-100 mt-1">Propulsé par GPT-4</p>
-              </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-blue-600/50 p-1 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+           {/* Messages */}
+           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+             {messages.map((message, index) => (
+               <div
+                 key={index}
+                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} ${fadeIn}`}
+               >
+                 <div className={`
+                   flex items-start space-x-2 max-w-[80%]
+                   ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'}
+                 `}>
+                   <div className={`
+                     w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
+                     ${message.type === 'user' ? 'bg-blue-100' : 'bg-white'}
+                   `}>
+                     {message.type === 'user' ? 
+                       <User className="w-5 h-5 text-blue-600" /> : 
+                       <Bot className="w-5 h-5 text-gray-600" />
+                     }
+                   </div>
+                   <div className={`
+                     py-2 px-4 rounded-2xl shadow-sm
+                     ${message.type === 'user' 
+                       ? 'bg-blue-600 text-white rounded-br-none' 
+                       : 'bg-white text-gray-800 rounded-bl-none'}
+                   `}>
+                     <p className="text-sm">{message.text}</p>
+                   </div>
+                 </div>
+               </div>
+             ))}
+             {isTyping && <TypingIndicator />}
+             <div ref={messagesEndRef} />
+           </div>
 
-            {/* Zone de messages */}
-            <div className="flex-grow overflow-y-auto p-4 space-y-3">
-              {messages.map((message, index) => (
-                <div key={index} className={`flex gap-2 items-start ${message.type === 'user' ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    message.type === 'user' ? 'bg-blue-100' : 'bg-gray-100'
-                  }`}>
-                    {message.type === 'user' ? 
-                      <User className="w-4 h-4 text-blue-600" /> : 
-                      <Bot className="w-4 h-4 text-gray-600" />
-                    }
-                  </div>
-                  <div className={`
-                    max-w-[70%] p-3 rounded-lg text-sm
-                    ${message.type === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}
-                    ${message.withDelay ? 'animate-fade-in' : ''}
-                  `}>
-                    {message.text}
-                  </div>
-                </div>
-              ))}
-              {isTyping && <TypingIndicator />}
-              <div ref={messagesEndRef} />
-            </div>
+           {/* Suggestions */}
+           {remainingQuestions.length > 0 && (
+             <div className="border-t border-gray-100 bg-white">
+               <button
+                 onClick={() => setSuggestionsVisible(!suggestionsVisible)}
+                 className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+               >
+                 <span className="text-sm font-medium">Questions suggérées ({remainingQuestions.length})</span>
+                 {suggestionsVisible ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+               </button>
+               {suggestionsVisible && (
+                 <div className="max-h-40 overflow-y-auto p-3 bg-gray-50 space-y-2">
+                   {remainingQuestions.map((q) => (
+                     <button
+                       key={q.id}
+                       onClick={() => handleQuestionClick(q.question, q.answer, q.id)}
+                       className="w-full text-left p-3 rounded-xl bg-white hover:bg-blue-50 
+                                transition-colors text-sm text-gray-700 shadow-sm hover:shadow
+                                border border-gray-100 hover:border-blue-100"
+                     >
+                       {q.question}
+                     </button>
+                   ))}
+                 </div>
+               )}
+             </div>
+           )}
 
-            {/* Questions suggérées rétractables */}
-            {remainingQuestions.length > 0 && (
-              <div className="border-t border-gray-100">
-                <button
-                  onClick={() => setSuggestionsVisible(!suggestionsVisible)}
-                  className="w-full flex items-center justify-between p-2 text-sm text-gray-600 hover:bg-gray-50"
-                >
-                  <span>Questions suggérées ({remainingQuestions.length})</span>
-                  {suggestionsVisible ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-                </button>
-                {suggestionsVisible && (
-                  <div className="max-h-32 overflow-y-auto p-2 bg-gray-50">
-                    <div className="grid grid-cols-1 gap-2">
-                      {remainingQuestions.map((q) => (
-                        <button
-                          key={q.id}
-                          onClick={() => handleQuestionClick(q.question, q.answer, q.id)}
-                          className="text-left bg-white text-gray-700 px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors text-xs border border-gray-100"
-                        >
-                          {q.question}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+           {/* Input */}
+           <div className="p-4 bg-white border-t border-gray-100">
+             <div className="flex items-center space-x-2 bg-gray-50 rounded-xl border border-gray-200 focus-within:border-blue-400 transition-colors p-2">
+               <input
+                 type="text"
+                 value={userInput}
+                 onChange={(e) => setUserInput(e.target.value)}
+                 onKeyPress={(e) => e.key === 'Enter' && handleUserInput()}
+                 placeholder="Posez votre question..."
+                 className="flex-1 bg-transparent text-sm focus:outline-none px-2 text-gray-700 placeholder-gray-400"
+               />
+               <button 
+                 onClick={handleUserInput}
+                 className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors
+                          disabled:opacity-50 disabled:cursor-not-allowed"
+                 disabled={!userInput.trim()}
+               >
+                 <Send className="w-4 h-4" />
+               </button>
+             </div>
+           </div>
+         </div>
+       )}
+     </div>
 
-            {/* Input utilisateur */}
-            <div className="p-4 border-t border-gray-100">
-              <div className="flex items-center bg-gray-50 rounded-lg border border-gray-200 p-2">
-                <input
-                  type="text"
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleUserInput()}
-                  placeholder="Posez votre question..."
-                  className="flex-grow bg-transparent text-sm focus:outline-none px-2"
-                />
-                <button 
-                  onClick={handleUserInput}
-                  className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  <Send size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+     {/* Toggle button */}
+     <button 
+       onClick={() => setIsOpen(!isOpen)}
+       className={`
+         fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg
+         flex items-center justify-center transition-all duration-300
+         ${isOpen 
+           ? 'scale-0 opacity-0' 
+           : 'scale-100 opacity-100 bg-blue-600 hover:bg-blue-700 text-white'
+         }
+       `}
+     >
+       <MessageSquare className="w-6 h-6" />
+     </button>
+   </div>
+ );
 };
 
 
@@ -1154,55 +1156,40 @@ const App = () => {
     setCurrentPage('project-detail');
   };
 
-  const handleNextProject = (project) => {
-    setSelectedProject(project);
-  };
-
-  const handlePrevProject = (project) => {
-    setSelectedProject(project);
-  };
-
-  const renderContent = () => {
-    switch (currentPage) {
-      case 'home':
-        return (
-          <div className="space-y-8">
-            <section className="mb-12 bg-gray-100 p-6 rounded-lg">
-              <h3 className="text-3xl font-bold mb-4 border-b-2 border-gray-200 pb-3">Data Analyst</h3>
-              <p className="font-bold text-gray-800 mb-4">Power BI | Data Visualisation | Machine Learning | Python</p>
-              <p className="text-gray-700">{PROFILE.description}</p>
-            </section>
-            
-            <Projects onProjectClick={handleProjectClick} />
-            <Skills />
-          </div>
-        );
-  
-      case 'project-detail':
-        return (
-          <ProjectDetail 
-            project={selectedProject} 
-            onClose={() => setCurrentPage('home')}
-            onNextProject={handleNextProject}
-            onPrevProject={handlePrevProject}
-          />
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <div className="fixed left-0 top-0 w-1/3 h-full">
-        <ProfileSidebar />
+    <ThemeProvider>
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+        <div className="fixed left-0 top-0 w-1/3 h-full">
+          <ProfileSidebar />
+        </div>
+        <div className="w-2/3 ml-auto px-20 py-10">
+          {currentPage === 'home' ? (
+            <div className="space-y-8">
+              <section className="mb-12 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
+                <h3 className="text-3xl font-bold mb-4 border-b-2 border-gray-200 dark:border-gray-700 
+                           pb-3 text-gray-800 dark:text-white">
+                  Data Analyst
+                </h3>
+                <p className="font-bold text-gray-800 dark:text-gray-200 mb-4">
+                  Power BI | Data Visualisation | Machine Learning | Python
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">{PROFILE.description}</p>
+              </section>
+              <Projects onProjectClick={handleProjectClick} />
+              <Skills />
+            </div>
+          ) : (
+            <ProjectDetail 
+              project={selectedProject} 
+              onClose={() => setCurrentPage('home')}
+              onNextProject={setSelectedProject}
+              onPrevProject={setSelectedProject}
+            />
+          )}
+        </div>
+        <Chatbot />
       </div>
-      
-      <div className="w-2/3 ml-auto px-20 py-10">
-        {renderContent()}
-      </div>
-      <Chatbot />
-    </div>
+    </ThemeProvider>
   );
 };
 
