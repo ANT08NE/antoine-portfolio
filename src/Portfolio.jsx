@@ -604,6 +604,39 @@ const Skills = () => {
           </div>
         ))}
       </div>
+
+            {/* Certifications */}
+            <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="flex items-center gap-3 mb-6">
+          <Award className="text-yellow-500" />
+          <h4 className="font-semibold text-lg">Certifications</h4>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4">
+          {certifications.map((cert, idx) => (
+            <div key={idx} className="p-4 rounded-lg border border-gray-200 flex items-start gap-3 hover:bg-gray-50 transition-colors">
+              <img src={cert.logo} alt={cert.issuer} className="w-8 h-8 rounded" />
+              <div className="flex-grow">
+                <h5 className="font-medium text-sm">{cert.name}</h5>
+                <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                  <span>{cert.issuer}</span>
+                  <span>•</span>
+                  <span>{cert.date}</span>
+                </div>
+              </div>
+              <a 
+                href={cert.verificationUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:text-blue-600"
+              >
+                <ExternalLink size={16} />
+              </a>
+            </div>
+          ))}
+        </div>
+      </div>
+      
     </div>
   );
 };
@@ -1150,24 +1183,64 @@ Formation solide en data science et statistiques`
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedProject, setSelectedProject] = useState(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false); // État pour gérer si la barre latérale est réduite
 
   const handleProjectClick = (project) => {
     setSelectedProject(project);
     setCurrentPage('project-detail');
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
   return (
     <ThemeProvider>
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-        <div className="fixed left-0 top-0 w-1/3 h-full">
-          <ProfileSidebar />
+        {/* Barre latérale */}
+        <div
+          className={`h-full transition-all duration-300 ${
+            isSidebarCollapsed ? 'w-16' : 'w-1/3'
+          }`}
+        >
+          {/* Contenu de la barre latérale */}
+          <div className="h-full bg-gradient-to-b from-blue-50 dark:from-blue-900 to-white dark:to-gray-900">
+            {!isSidebarCollapsed && <ProfileSidebar />}
+          </div>
+
+          {/* Bandeau réduit avec "Plus d'infos" et une flèche */}
+          {isSidebarCollapsed && (
+            <div
+              className="absolute inset-y-0 left-0 w-16 flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 dark:from-blue-900 to-white dark:to-gray-900 cursor-pointer"
+              onClick={toggleSidebar}
+            >
+              <ChevronRight className="w-6 h-6 text-gray-600 dark:text-gray-300 mb-2" />
+
+            </div>
+          )}
         </div>
-        <div className="w-2/3 ml-auto px-20 py-10">
+
+        {/* Bouton de bascule sur la bordure droite */}
+        {!isSidebarCollapsed && (
+          <button
+            onClick={toggleSidebar}
+            className="fixed top-1/2 left-[calc(33.33%-16px)] z-50 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-lg"
+            aria-label="Toggle sidebar"
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          </button>
+        )}
+
+        {/* Contenu principal */}
+        <div
+          className={`flex-1 transition-all duration-300 ${
+            isSidebarCollapsed ? 'ml-16' : 'ml-1/3'
+          } px-20 py-10`}
+        >
           {currentPage === 'home' ? (
             <div className="space-y-8">
               <section className="mb-12 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
-                <h3 className="text-3xl font-bold mb-4 border-b-2 border-gray-200 dark:border-gray-700 
-                           pb-3 text-gray-800 dark:text-white">
+                <h3 className="text-3xl font-bold mb-4 border-b-2 border-gray-200 dark:border-gray-700 pb-3 text-gray-800 dark:text-white">
                   Data Analyst
                 </h3>
                 <p className="font-bold text-gray-800 dark:text-gray-200 mb-4">
@@ -1179,8 +1252,8 @@ const App = () => {
               <Skills />
             </div>
           ) : (
-            <ProjectDetail 
-              project={selectedProject} 
+            <ProjectDetail
+              project={selectedProject}
               onClose={() => setCurrentPage('home')}
               onNextProject={setSelectedProject}
               onPrevProject={setSelectedProject}
