@@ -12,7 +12,7 @@ const PROFILE = {
   email: 'tirardantoine@yahoo.fr',
   phone: '+33 6 73 21 74 34',
   linkedin: 'https://www.linkedin.com/in/antoine-tirard',
-  photo: '/profile-pic.png',
+  photo:  `${process.env.PUBLIC_URL}/profile-pic.png`,
   description: 'Passionné par la data, je transforme des données brutes en insights stratégiques. Mon expertise allie analyse technique et vision business.'
 };
 
@@ -65,7 +65,7 @@ const PROJECTS = [
     id: 1,
     title: "Dashboards de Monitoring EDF Renouvelables",
     shortDescription: "Conception et développement de tableaux de bord pour le suivi de l'onboarding des parcs d'énergies renouvelables",
-    image: "projet1.png",
+    image: `${process.env.PUBLIC_URL}/projet1.png`,
     technologies: ["Power BI", "SQL", "Snowflake", "DAX", "Power Query"],
     context: {
       department: "Pôle Industrial Data Onboarding",
@@ -150,7 +150,7 @@ const PROJECTS = [
     id: 2,
     title: "Analyse Prédictive pour l'Installation de Bornes IRVE",
     shortDescription: "Développement d'un modèle de machine learning pour optimiser le placement des bornes de recharge électrique",
-    image: "projetseeyousun.png",
+    image: `${process.env.PUBLIC_URL}/projetseeyousun.png`,
     technologies: ["Python", "Scikit-learn", "Streamlit", "Folium", "Pandas", "NumPy"],
     context: {
       department: "Innovation & Développement Durable",
@@ -239,7 +239,7 @@ const PROJECTS = [
       id: 3,
       title: "Optimisation de la Supply Chain E-commerce",
       shortDescription: "Développement d'un dashboard Power BI pour améliorer les performances logistiques et réduire les délais de livraison",
-      image: "projet_build.png",
+      image: `${process.env.PUBLIC_URL}/projet_build.png`,
       technologies: ["Power BI", "DAX", "SQL", "Python", "Excel"],
       context: {
         department: "Département Logistique & E-commerce",
@@ -328,7 +328,7 @@ const PROJECTS = [
     id: 4,
     title: "Portfolio Interactif React",
     shortDescription: "Conception et développement d'un portfolio personnel moderne et interactif en React",
-    image: "portfolio.png",
+    image: `${process.env.PUBLIC_URL}/portfolio.png`,
     technologies: ["React", "Tailwind CSS", "JavaScript", "OpenAI API", "Lucide Icons"],
     context: {
       department: "Projet Personnel",
