@@ -6,8 +6,9 @@ import {
 
 } from 'lucide-react';
 
+
 const PROFILE = {
-  name: 'Antoine Tirard',
+  name: 'Antoine Tirard le boss',
   title: 'Data Analyst',
   email: 'tirardantoine@yahoo.fr',
   phone: '+33 6 73 21 74 34',
