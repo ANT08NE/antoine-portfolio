@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/antoine-portfolio/static/css/main.2b5ee753.css",
+    "main.js": "/antoine-portfolio/static/js/main.17be6121.js",
+    "index.html": "/antoine-portfolio/index.html",
+    "main.2b5ee753.css.map": "/antoine-portfolio/static/css/main.2b5ee753.css.map",
+    "main.17be6121.js.map": "/antoine-portfolio/static/js/main.17be6121.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2b5ee753.css",
+    "static/js/main.17be6121.js"
+  ]
+}
