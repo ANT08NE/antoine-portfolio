@@ -20,8 +20,11 @@ const PROFILE = {
 // Composant Profil
 const ProfileSidebar = () => {
   return (
-    <div className="fixed left-0 top-0 w-1/3 h-full bg-gradient-to-b from-blue-50 dark:from-blue-900 
-                    to-white dark:to-gray-900 flex flex-col transition-colors duration-200">
+    <div className="fixed left-0 top-0 w-1/3 h-full 
+                bg-gradient-to-b from-blue-100 dark:from-blue-950 
+                to-white dark:to-gray-900 
+                flex flex-col transition-colors duration-200">
+
       <div className="flex-grow flex items-center justify-center">
         <div className="text-center">
           <img 
@@ -606,36 +609,45 @@ const Skills = () => {
       </div>
 
             {/* Certifications */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Award className="text-yellow-500" />
-          <h4 className="font-semibold text-lg">Certifications</h4>
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+  <div className="flex items-center gap-3 mb-6">
+    <Award className="text-yellow-500" />
+    <h4 className="font-semibold text-lg text-gray-800 dark:text-white">Certifications</h4>
+  </div>
+  
+  <div className="grid grid-cols-2 gap-4">
+    {certifications.map((cert, idx) => (
+      <div 
+        key={idx} 
+        className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 
+                   flex items-start gap-3 
+                   hover:bg-gray-50 dark:hover:bg-gray-700/50 
+                   transition-colors
+                   bg-white dark:bg-gray-800"
+      >
+        <img src={cert.logo} alt={cert.issuer} className="w-8 h-8 rounded" />
+        <div className="flex-grow">
+          <h5 className="font-medium text-sm text-gray-800 dark:text-white">
+            {cert.name}
+          </h5>
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <span>{cert.issuer}</span>
+            <span>•</span>
+            <span>{cert.date}</span>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          {certifications.map((cert, idx) => (
-            <div key={idx} className="p-4 rounded-lg border border-gray-200 flex items-start gap-3 hover:bg-gray-50 transition-colors">
-              <img src={cert.logo} alt={cert.issuer} className="w-8 h-8 rounded" />
-              <div className="flex-grow">
-                <h5 className="font-medium text-sm">{cert.name}</h5>
-                <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                  <span>{cert.issuer}</span>
-                  <span>•</span>
-                  <span>{cert.date}</span>
-                </div>
-              </div>
-              <a 
-                href={cert.verificationUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:text-blue-600"
-              >
-                <ExternalLink size={16} />
-              </a>
-            </div>
-          ))}
-        </div>
+        <a 
+          href={cert.verificationUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          <ExternalLink size={16} />
+        </a>
       </div>
+    ))}
+  </div>
+</div>
       
     </div>
   );
@@ -679,97 +691,125 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
   const nextProject = PROJECTS[(currentIndex + 1) % PROJECTS.length];
   const prevProject = PROJECTS[(currentIndex - 1 + PROJECTS.length) % PROJECTS.length];
 
+  const buttonStyle = "flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-white";
+  const iconButtonStyle = "flex items-center justify-center bg-gray-100 dark:bg-gray-800 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-white";
+  const bottomButtonStyle = "flex items-center gap-3 bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors min-w-[200px] text-gray-800 dark:text-white";
+
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm">
-      {/* Header */}
-      <div className="relative h-64">
+    <div className="max-w-4xl mx-auto">
+      {/* Navigation Header */}
+      <div className="flex justify-between items-center mb-8">
+        <button 
+          onClick={onClose}
+          className={buttonStyle}
+        >
+          <Home className="w-4 h-4 text-gray-800 dark:text-white" />
+          <span>Retour</span>
+        </button>
+
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => onPrevProject(prevProject)}
+            className={iconButtonStyle}
+            title={prevProject.title}
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-800 dark:text-white" />
+          </button>
+          <button 
+            onClick={() => onNextProject(nextProject)}
+            className={iconButtonStyle}
+            title={nextProject.title}
+          >
+            <ChevronRight className="w-5 h-5 text-gray-800 dark:text-white" />
+          </button>
+        </div>
+      </div>
+
+      {/* Hero Image */}
+      <div className="relative h-[400px] mb-12 rounded-xl overflow-hidden">
         <img 
           src={project.image} 
           alt={project.title} 
-          className="w-full h-full object-cover rounded-t-xl"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 rounded-t-xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/70" />
         
-        {/* Navigation */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-          <button 
-            onClick={onClose}
-            className="flex items-center gap-2 bg-white/90 px-3 py-1.5 rounded-full text-sm hover:bg-white transition-colors"
-          >
-            <Home className="w-4 h-4" />
-            <span>Retour</span>
-          </button>
-        </div>
-        
-        {/* Project Title */}
-        <div className="absolute bottom-4 left-4 right-4">
-          <h1 className="text-2xl font-bold text-white mb-2">{project.title}</h1>
+        <div className="absolute bottom-8 left-8 right-8">
+          <h1 className="text-4xl font-bold text-white mb-4">{project.title}</h1>
           {project.context && (
-            <div className="flex items-center gap-2 text-white/90 text-sm">
-              <Clock className="w-4 h-4" />
-              <span>{project.context.duration}</span>
-              <span className="mx-2">•</span>
-              <span>{project.context.department}</span>
+            <div className="flex flex-wrap items-center gap-4 text-white/90">
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-white" />
+                <span>{project.context.duration}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-white" />
+                <span>{project.context.department}</span>
+              </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6 space-y-8">
+      {/* Content Sections - Vertical Layout */}
+      <div className="space-y-12">
         {/* Technologies */}
-        <div>
-          <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-            <Package className="w-4 h-4 text-blue-500" />
+        <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+          <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+            <Package className="w-6 h-6 text-blue-500" />
             Technologies
           </h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {project.technologies.map((tech, index) => (
               <span 
                 key={index}
-                className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm"
+                className="bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 
+                         px-4 py-2 rounded-xl text-sm font-medium"
               >
                 {tech}
               </span>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Challenges */}
         {project.challenges && (
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <Target className="w-4 h-4 text-orange-500" />
+          <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+            <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+              <Target className="w-6 h-6 text-orange-500" />
               Défis principaux
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-4">
               {project.challenges.map((challenge, index) => (
-                <div key={index} className="flex gap-3 items-start">
-                  <span className="bg-orange-100 text-orange-600 w-6 h-6 flex-shrink-0 flex items-center justify-center rounded-full text-sm">
+                <div key={index} className="flex gap-4 items-start">
+                  <span className="bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-300 
+                                w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-xl font-medium">
                     {index + 1}
                   </span>
-                  <p className="text-gray-600 text-sm">{challenge}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{challenge}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Method */}
+        {/* Methodology */}
         {project.methodology && (
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <GitBranch className="w-4 h-4 text-purple-500" />
-              Approche
+          <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+            <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+              <GitBranch className="w-6 h-6 text-purple-500" />
+              Approche méthodologique
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {project.methodology.map((phase, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-medium text-gray-800 mb-2">{phase.phase}</h3>
-                  <ul className="space-y-1">
+                <div key={index} className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                  <h3 className="font-semibold text-lg text-gray-800 dark:text-white mb-4">
+                    {phase.phase}
+                  </h3>
+                  <ul className="space-y-3">
                     {phase.tasks.map((task, taskIndex) => (
-                      <li key={taskIndex} className="text-sm text-gray-600 flex gap-2 items-center">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                      <li key={taskIndex} className="flex gap-3 items-start text-gray-600 dark:text-gray-300">
+                        <span className="w-1.5 h-1.5 bg-purple-400 dark:bg-purple-500 rounded-full mt-2" />
                         {task}
                       </li>
                     ))}
@@ -777,50 +817,59 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
         {/* Results */}
         {project.results && (
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <BarChart className="w-4 h-4 text-green-500" />
+          <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+            <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+              <BarChart className="w-6 h-6 text-green-500" />
               Résultats
             </h2>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="space-y-4">
               {project.results.map((result, index) => (
-                <div key={index} className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-xl font-bold text-green-600 mb-1">{result.value}</p>
-                  <p className="text-sm text-gray-600">{result.description}</p>
+                <div key={index} className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl flex items-center gap-6">
+                  <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                    {result.value}
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300">{result.description}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
       </div>
 
       {/* Navigation Footer */}
-      <div className="border-t border-gray-100 p-4 flex justify-between items-center text-sm">
-        <button 
-          onClick={() => onPrevProject(prevProject)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          <span>{prevProject.title}</span>
-        </button>
-        
-        <button 
-          onClick={() => onNextProject(nextProject)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
-        >
-          <span>{nextProject.title}</span>
-          <ChevronRight className="w-4 h-4" />
-        </button>
+      <div className="mt-12 py-8 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-center">
+          <button 
+            onClick={() => onPrevProject(prevProject)}
+            className={bottomButtonStyle}
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-800 dark:text-white" />
+            <div className="text-left">
+              <div className="text-sm text-gray-500 dark:text-gray-400">Précédent</div>
+              <div className="font-medium text-gray-800 dark:text-gray-200 line-clamp-1">{prevProject.title}</div>
+            </div>
+          </button>
+          
+          <button 
+            onClick={() => onNextProject(nextProject)}
+            className={bottomButtonStyle}
+          >
+            <div className="text-right">
+              <div className="text-sm text-gray-500 dark:text-gray-400">Suivant</div>
+              <div className="font-medium text-gray-800 dark:text-gray-200 line-clamp-1">{nextProject.title}</div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-800 dark:text-white" />
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-
 // Page d'accueil
 const HomePage = () => {
   return (
@@ -1180,10 +1229,11 @@ Formation solide en data science et statistiques`
 
 
 // Composant principal
+
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedProject, setSelectedProject] = useState(null);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false); // État pour gérer si la barre latérale est réduite
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleProjectClick = (project) => {
     setSelectedProject(project);
@@ -1199,46 +1249,48 @@ const App = () => {
       <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
         {/* Barre latérale */}
         <div
-          className={`h-full transition-all duration-300 ${
+          className={`fixed top-0 left-0 h-full transition-all duration-300 ${
             isSidebarCollapsed ? 'w-16' : 'w-1/3'
           }`}
         >
           {/* Contenu de la barre latérale */}
           <div className="h-full bg-gradient-to-b from-blue-50 dark:from-blue-900 to-white dark:to-gray-900">
             {!isSidebarCollapsed && <ProfileSidebar />}
+            
+            {/* Bouton de toggle intégré dans la sidebar */}
+            <button
+              onClick={toggleSidebar}
+              className={`absolute top-1/2 -right-4 z-50 p-2 rounded-full bg-gray-100 
+                         dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 
+                         transition-colors shadow-lg`}
+              aria-label="Toggle sidebar"
+            >
+              {isSidebarCollapsed ? (
+                <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              ) : (
+                <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              )}
+            </button>
           </div>
 
-          {/* Bandeau réduit avec "Plus d'infos" et une flèche */}
+          {/* Bandeau réduit */}
           {isSidebarCollapsed && (
-            <div
-              className="absolute inset-y-0 left-0 w-16 flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 dark:from-blue-900 to-white dark:to-gray-900 cursor-pointer"
-              onClick={toggleSidebar}
-            >
-              <ChevronRight className="w-6 h-6 text-gray-600 dark:text-gray-300 mb-2" />
-
-            </div>
-          )}
+  <div className="h-full w-16 
+                  bg-gradient-to-b from-blue-100 dark:from-blue-950 
+                  to-white dark:to-gray-900" />
+)}
         </div>
 
-        {/* Bouton de bascule sur la bordure droite */}
-        {!isSidebarCollapsed && (
-          <button
-            onClick={toggleSidebar}
-            className="fixed top-1/2 left-[calc(33.33%-16px)] z-50 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors shadow-lg"
-            aria-label="Toggle sidebar"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
-          </button>
-        )}
-
-        {/* Contenu principal */}
+        {/* Contenu principal avec marges ajustées */}
         <div
           className={`flex-1 transition-all duration-300 ${
-            isSidebarCollapsed ? 'ml-16' : 'ml-1/3'
-          } px-20 py-10`}
+            isSidebarCollapsed 
+              ? 'ml-16 px-16' 
+              : 'ml-[33.33%] pr-24 pl-16'
+          } py-10`}
         >
           {currentPage === 'home' ? (
-            <div className="space-y-8">
+            <div className="space-y-8 w-full max-w-6xl mx-auto">
               <section className="mb-12 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
                 <h3 className="text-3xl font-bold mb-4 border-b-2 border-gray-200 dark:border-gray-700 pb-3 text-gray-800 dark:text-white">
                   Data Analyst
