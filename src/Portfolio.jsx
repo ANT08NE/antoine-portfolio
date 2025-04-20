@@ -75,7 +75,7 @@ const PROJECTS = [
     id: 1,
     title: "Dashboards de Monitoring EDF Renouvelables",
     shortDescription: "Conception et développement de tableaux de bord pour le suivi de l'onboarding des parcs d'énergies renouvelables",
-    image: `${process.env.PUBLIC_URL}/projet1.png`,
+    image: `${process.env.PUBLIC_URL}/pro1.png`,
     technologies: ["Power BI", "SQL", "Snowflake", "DAX", "Power Query"],
     context: {
       department: "Pôle Industrial Data Onboarding",
@@ -129,6 +129,12 @@ const PROJECTS = [
         metric: "Temps gagné",
         value: "70%",
         description: "Réduction du temps de reporting"
+      },
+      {
+        type: "image",
+        image: `${process.env.PUBLIC_URL}/projet1.png`,
+        caption: "Dashboard de suivi des parcs renouvelables",
+        description: "Visualisation interactive des KPIs clés pour le monitoring des installations"
       }
     ],
     keyFeatures: [
@@ -160,7 +166,7 @@ const PROJECTS = [
     id: 2,
     title: "Analyse Prédictive pour l'Installation de Bornes IRVE",
     shortDescription: "Développement d'un modèle de machine learning pour optimiser le placement des bornes de recharge électrique",
-    image: `${process.env.PUBLIC_URL}/projetseeyousun.png`,
+    image: `${process.env.PUBLIC_URL}/pro2.png`,
     technologies: ["Python", "Scikit-learn", "Streamlit", "Folium", "Pandas", "NumPy"],
     context: {
       department: "Innovation & Développement Durable",
@@ -698,7 +704,7 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Navigation Header */}
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-6">
         <button 
           onClick={onClose}
           className={buttonStyle}
@@ -725,8 +731,8 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
         </div>
       </div>
 
-      {/* Hero Image */}
-      <div className="relative h-[400px] mb-12 rounded-xl overflow-hidden">
+      {/* Hero Image - Hauteur réduite */}
+      <div className="relative h-[300px] mb-8 rounded-xl overflow-hidden">
         <img 
           src={project.image} 
           alt={project.title} 
@@ -734,8 +740,8 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/70" />
         
-        <div className="absolute bottom-8 left-8 right-8">
-          <h1 className="text-4xl font-bold text-white mb-4">{project.title}</h1>
+        <div className="absolute bottom-6 left-6 right-6">
+          <h1 className="text-3xl font-bold text-white mb-3">{project.title}</h1>
           {project.context && (
             <div className="flex flex-wrap items-center gap-4 text-white/90">
               <div className="flex items-center gap-2">
@@ -751,8 +757,9 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
         </div>
       </div>
 
-      {/* Content Sections - Vertical Layout */}
-      <div className="space-y-12">
+      {/* Content Sections - Espacement réduit */}
+      <div className="space-y-3">
+        {/* Le reste du code reste identique... */}
         {/* Technologies */}
         <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
           <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
@@ -822,13 +829,15 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
 
         {/* Results */}
         {project.results && (
-          <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
-            <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
-              <BarChart className="w-6 h-6 text-green-500" />
-              Résultats
-            </h2>
-            <div className="space-y-4">
-              {project.results.map((result, index) => (
+        <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+          <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+            <BarChart className="w-6 h-6 text-green-500" />
+            Résultats
+          </h2>
+          <div className="space-y-6">
+            {/* Métriques standards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {project.results.filter(result => !result.type).map((result, index) => (
                 <div key={index} className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl flex items-center gap-6">
                   <div className="text-3xl font-bold text-green-600 dark:text-green-400">
                     {result.value}
@@ -837,12 +846,36 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
                 </div>
               ))}
             </div>
+               {/* Images de résultats */}
+               {project.results.filter(result => result.type === "image").map((result, index) => (
+              <div key={index} className="mt-6">
+                <div className="overflow-hidden rounded-xl shadow-lg">
+                  <img 
+                    src={result.image}
+                    alt={result.caption}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+                <div className="mt-3">
+                  <h4 className="font-medium text-gray-800 dark:text-white mb-1">
+                    {result.caption}
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {result.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+            
+
+
           </section>
         )}
       </div>
 
       {/* Navigation Footer */}
-      <div className="mt-12 py-8 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-8 py-6 border-t border-gray-200 dark:border-gray-700">
         <div className="flex justify-between items-center">
           <button 
             onClick={() => onPrevProject(prevProject)}
