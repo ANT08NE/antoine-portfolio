@@ -1015,7 +1015,7 @@ const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
 
   const callOpenAI = async (userMessage) => {
     try {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completion', {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
     "Authorization": `Bearer ${process.env.REACT_APP_GROQ_API_KEY}`,
     "Content-Type": "application/json"
