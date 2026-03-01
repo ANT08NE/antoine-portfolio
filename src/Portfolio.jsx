@@ -1009,18 +1009,18 @@ const Chatbot = () => {
   const messagesEndRef = useRef(null);
   
   // Configuration OpenAI
+  
   const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
   const callOpenAI = async (userMessage) => {
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completion', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${OPENAI_API_KEY}`
+    "Authorization": `Bearer ${process.env.REACT_APP_GROQ_API_KEY}`,
+    "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: "gpt-4",
+          model: "llama-3.3-70b-versatile",
           messages: [
             {
               role: "system",
