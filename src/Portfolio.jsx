@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  User, Mail, Linkedin, Phone, Code, Database, BarChart, FileText, Zap, ChevronDown,ChevronUp,
-  Download, Send, ChevronRight, ChevronLeft, MapPin, Circle, MessageSquare, X, Bot,
-  Home, Target, Calendar, CheckCircle, ArrowRight, ExternalLink, Clock, Users, GitBranch,Package,Award
-
+  User, Mail, Linkedin, Phone, Code, Database, BarChart, FileText, Zap,
+  Download, Send, ChevronRight, ChevronLeft, MapPin, Circle, MessageSquare, X,
+  Bot, Home, Target, Calendar, CheckCircle, ArrowRight, ExternalLink, Clock,
+  Users, GitBranch, Package, Award, Sun, Moon, ChevronDown, ChevronUp
 } from 'lucide-react';
+
 
 const PROFILE = {
   name: 'Antoine Tirard',
@@ -12,60 +13,105 @@ const PROFILE = {
   email: 'tirardantoine@yahoo.fr',
   phone: '+33 6 73 21 74 34',
   linkedin: 'https://www.linkedin.com/in/antoine-tirard',
-  photo: '/profile-pic.png',
+  photo:  `${process.env.PUBLIC_URL}/profile-pic.png`,
   description: 'Passionné par la data, je transforme des données brutes en insights stratégiques. Mon expertise allie analyse technique et vision business.'
+};
+
+const TypewriterTitle = () => {
+  const titles = ['Data Analyst', 'Power BI Expert', 'Machine Learning', 'Data Scientist'];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const currentTitle = titles[currentIndex];
+    if (isPaused) {
+      const t = setTimeout(() => { setIsPaused(false); setIsDeleting(true); }, 1800);
+      return () => clearTimeout(t);
+    }
+    if (!isDeleting && displayed.length < currentTitle.length) {
+      const t = setTimeout(() => setDisplayed(currentTitle.slice(0, displayed.length + 1)), 80);
+      return () => clearTimeout(t);
+    }
+    if (!isDeleting && displayed.length === currentTitle.length) { setIsPaused(true); return; }
+    if (isDeleting && displayed.length > 0) {
+      const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 45);
+      return () => clearTimeout(t);
+    }
+    if (isDeleting && displayed.length === 0) { setIsDeleting(false); setCurrentIndex(p => (p + 1) % titles.length); }
+  }, [displayed, isDeleting, isPaused, currentIndex]);
+
+  return (
+    <span className="inline-flex items-center gap-1">
+      <span className="text-blue-600 dark:text-blue-400">{displayed}</span>
+      <span className="inline-block w-[2px] h-8 bg-blue-500 ml-0.5" style={{ animation: 'blink 1s step-end infinite' }} />
+      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+    </span>
+  );
 };
 
 // Composant Profil
 const ProfileSidebar = () => {
   return (
-    <div className="fixed left-0 top-0 w-1/3 h-full bg-gradient-to-b from-blue-50 flex items-center justify-center shadow-[5px_0_5px_-5px_rgba(0,0,0,0.1)]">
-      <div className="text-center ">
-        <img 
-          src={PROFILE.photo} 
-          alt={PROFILE.name} 
-          className="rounded-full w-48 h-48 object-cover mb-6 mx-auto shadow-lg"
-        />
-        <h1 className="text-3xl font-bold text-gray-800">{PROFILE.name}</h1>
-        <p className="text-xl text-gray-600 mb-2">{PROFILE.title}</p>
-        
-        {/* Localisation */}
-        <p className="text-gray-600 mb-2 flex justify-center items-center">
-          <MapPin size={16} className="mr-2" /> France
-        </p>
-        
-        {/* Availability status */}
-        <div className="flex justify-center items-center space-x-2 mb-6">
-          <div className="relative inline-flex items-center justify-center">
-            <span className="absolute animate-ping w-3 h-3 rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+    <div className="fixed left-0 top-0 w-1/3 h-full 
+                bg-gradient-to-b from-blue-100 dark:from-blue-950 
+                to-white dark:to-gray-900 
+                flex flex-col transition-colors duration-200">
+
+      
+
+      <div className="flex-grow flex items-center justify-center">
+        <div className="text-center">
+          <img 
+            src={PROFILE.photo} 
+            alt={PROFILE.name} 
+            className="rounded-full w-48 h-48 object-cover mb-6 mx-auto shadow-lg"
+          />
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">{PROFILE.name}</h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-2">{PROFILE.title}</p>
+          
+          <p className="text-gray-600 dark:text-gray-400 mb-2 flex justify-center items-center">
+            <MapPin size={16} className="mr-2" /> France
+          </p>
+          
+          <div className="flex justify-center items-center space-x-2 mb-6">
+            <div className="relative inline-flex items-center justify-center">
+              <span className="absolute animate-ping w-3 h-3 rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </div>
+            <p className="text-sm text-green-600 dark:text-green-400">Disponible</p>
           </div>
-          <p className="text-sm text-green-600">Disponible</p>
+          
+          <div className="flex justify-center space-x-4 mb-2">
+            <a href={`mailto:${PROFILE.email}`} className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors">
+              <Mail size={24} />
+            </a>
+            <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors">
+              <Linkedin size={24} />
+            </a>
+            <a href={`tel:${PROFILE.phone}`} className="text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors">
+              <Phone size={24} />
+            </a>
+          </div>
         </div>
-        
-        {/* Contact icons */}
-        <div className="flex justify-center space-x-4 mb-2">
-          <a href={`mailto:${PROFILE.email}`} className="text-blue-500 hover:text-blue-600 transition-colors">
-            <Mail size={24} />
-          </a>
-          <a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:text-blue-600 transition-colors">
-            <Linkedin size={24} />
-          </a>
-          <a href={`tel:${PROFILE.phone}`} className="text-blue-500 hover:text-blue-600 transition-colors">
-            <Phone size={24} />
-          </a>
-        </div>
+      </div>
+      
+      <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+        © {new Date().getFullYear()}. Tous droits réservés.
       </div>
     </div>
   );
 };
+
+
 
 const PROJECTS = [
   {
     id: 1,
     title: "Dashboards de Monitoring EDF Renouvelables",
     shortDescription: "Conception et développement de tableaux de bord pour le suivi de l'onboarding des parcs d'énergies renouvelables",
-    image: "projet1.png",
+    image: `${process.env.PUBLIC_URL}/pro1.png`,
     technologies: ["Power BI", "SQL", "Snowflake", "DAX", "Power Query"],
     context: {
       department: "Pôle Industrial Data Onboarding",
@@ -119,6 +165,12 @@ const PROJECTS = [
         metric: "Temps gagné",
         value: "70%",
         description: "Réduction du temps de reporting"
+      },
+      {
+        type: "image",
+        image: `${process.env.PUBLIC_URL}/projet1.png`,
+        caption: "Dashboard de suivi des parcs renouvelables",
+        description: "Visualisation interactive des KPIs clés pour le monitoring des installations"
       }
     ],
     keyFeatures: [
@@ -150,7 +202,7 @@ const PROJECTS = [
     id: 2,
     title: "Analyse Prédictive pour l'Installation de Bornes IRVE",
     shortDescription: "Développement d'un modèle de machine learning pour optimiser le placement des bornes de recharge électrique",
-    image: "projetseeyousun.png",
+    image: `${process.env.PUBLIC_URL}/pro2.png`,
     technologies: ["Python", "Scikit-learn", "Streamlit", "Folium", "Pandas", "NumPy"],
     context: {
       department: "Innovation & Développement Durable",
@@ -239,7 +291,7 @@ const PROJECTS = [
       id: 3,
       title: "Optimisation de la Supply Chain E-commerce",
       shortDescription: "Développement d'un dashboard Power BI pour améliorer les performances logistiques et réduire les délais de livraison",
-      image: "projet_build.png",
+      image: `${process.env.PUBLIC_URL}/projet_build.png`,
       technologies: ["Power BI", "DAX", "SQL", "Python", "Excel"],
       context: {
         department: "Département Logistique & E-commerce",
@@ -328,7 +380,7 @@ const PROJECTS = [
     id: 4,
     title: "Portfolio Interactif React",
     shortDescription: "Conception et développement d'un portfolio personnel moderne et interactif en React",
-    image: "portfolio.png",
+    image: `${process.env.PUBLIC_URL}/portfolio.png`,
     technologies: ["React", "Tailwind CSS", "JavaScript", "OpenAI API", "Lucide Icons"],
     context: {
       department: "Projet Personnel",
@@ -427,13 +479,17 @@ const PROJECTS = [
 const Projects = ({ onProjectClick }) => {
   return (
     <div>
-      <h3 className="text-3xl font-bold mb-8 border-b-2 border-gray-200 pb-3">Mes Projets</h3>
+      <h3 className="text-3xl font-bold mb-8 border-b-2 border-gray-200 dark:border-gray-700 pb-3 
+                     text-gray-800 dark:text-white">
+        Mes Projets
+      </h3>
       <div className="grid md:grid-cols-2 gap-6">
         {PROJECTS.map(project => (
           <div 
             onClick={() => onProjectClick(project)}
             key={project.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all transform hover:-translate-y-2 cursor-pointer"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden 
+                       hover:shadow-xl transition-all transform hover:-translate-y-2 cursor-pointer"
           >
             <img 
               src={project.image} 
@@ -441,13 +497,18 @@ const Projects = ({ onProjectClick }) => {
               className="w-full h-48 object-cover"
             />
             <div className="p-4">
-              <h3 className="font-bold text-xl mb-2">{project.title}</h3>
-              <p className="text-gray-600 mb-4">{project.shortDescription}</p>
+              <h3 className="font-bold text-xl mb-2 text-gray-800 dark:text-white">
+                {project.title}
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-4">
+                {project.shortDescription}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech, index) => (
                   <span 
                     key={index} 
-                    className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs"
+                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 
+                             px-2 py-1 rounded-full text-xs"
                   >
                     {tech}
                   </span>
@@ -460,7 +521,6 @@ const Projects = ({ onProjectClick }) => {
     </div>
   );
 };
-
 // Composant Compétences
 const Skills = () => {
   const skillCategories = [
@@ -545,51 +605,42 @@ const Skills = () => {
 
   return (
     <div className="space-y-8">
-<div>
-  <h3 className="text-3xl font-bold mb-2 border-b-2 border-gray-200 pb-3">Compétences & Expertise</h3>
-</div>
-      {/* Skills Grid */}
+      <div>
+        <h3 className="text-3xl font-bold mb-2 border-b-2 border-gray-200 dark:border-gray-700 pb-3 
+                       text-gray-800 dark:text-white">
+          Compétences & Expertise
+        </h3>
+      </div>
       <div className="grid grid-cols-2 gap-6">
         {skillCategories.map((category, idx) => (
-          <div key={idx} className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow">
+          <div key={idx} className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 
+                                  hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 rounded-lg bg-gray-50 text-blue-500">
+              <div className="p-2 rounded-lg bg-gray-50 dark:bg-gray-700 text-blue-500 dark:text-blue-400">
                 {category.icon}
               </div>
-              <h4 className="font-semibold text-lg">{category.name}</h4>
+              <h4 className="font-semibold text-lg text-gray-800 dark:text-white">{category.name}</h4>
             </div>
             
             <div className="space-y-4">
-              {/* Technologies principales */}
               <div className="flex flex-wrap gap-2">
                 {category.primaryTools.map((tool, i) => (
-                  <span key={i} className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700">
+                  <span key={i} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 
+                                         text-gray-700 dark:text-gray-300 rounded-full text-sm">
                     {tool}
                   </span>
                 ))}
               </div>
 
-              {/* Réalisations clés */}
               <div className="space-y-2">
-                <h5 className="font-medium text-sm text-gray-600">Réalisations clés :</h5>
+                <h5 className="font-medium text-sm text-gray-600 dark:text-gray-400">
+                  Réalisations clés :
+                </h5>
                 <ul className="text-sm space-y-1">
                   {category.keyAchievements.map((achievement, i) => (
                     <li key={i} className="flex items-start gap-2">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0"></span>
-                      <span>{achievement}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Projets récents */}
-              <div className="space-y-2">
-                <h5 className="font-medium text-sm text-gray-600">Projets récents :</h5>
-                <ul className="text-sm space-y-1">
-                  {category.recentProjects.map((project, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 flex-shrink-0"></span>
-                      <span>{project}</span>
+                      <span className="text-gray-600 dark:text-gray-300">{achievement}</span>
                     </li>
                   ))}
                 </ul>
@@ -599,41 +650,80 @@ const Skills = () => {
         ))}
       </div>
 
-      {/* Certifications */}
-      <div className="bg-white rounded-xl shadow-sm p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Award className="text-yellow-500" />
-          <h4 className="font-semibold text-lg">Certifications</h4>
+            {/* Certifications */}
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+  <div className="flex items-center gap-3 mb-6">
+    <Award className="text-yellow-500" />
+    <h4 className="font-semibold text-lg text-gray-800 dark:text-white">Certifications</h4>
+  </div>
+  
+  <div className="grid grid-cols-2 gap-4">
+    {certifications.map((cert, idx) => (
+      <div 
+        key={idx} 
+        className="p-4 rounded-lg border border-gray-200 dark:border-gray-700 
+                   flex items-start gap-3 
+                   hover:bg-gray-50 dark:hover:bg-gray-700/50 
+                   transition-colors
+                   bg-white dark:bg-gray-800"
+      >
+        <img src={cert.logo} alt={cert.issuer} className="w-8 h-8 rounded" />
+        <div className="flex-grow">
+          <h5 className="font-medium text-sm text-gray-800 dark:text-white">
+            {cert.name}
+          </h5>
+          <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <span>{cert.issuer}</span>
+            <span>•</span>
+            <span>{cert.date}</span>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          {certifications.map((cert, idx) => (
-            <div key={idx} className="p-4 rounded-lg border border-gray-200 flex items-start gap-3 hover:bg-gray-50 transition-colors">
-              <img src={cert.logo} alt={cert.issuer} className="w-8 h-8 rounded" />
-              <div className="flex-grow">
-                <h5 className="font-medium text-sm">{cert.name}</h5>
-                <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                  <span>{cert.issuer}</span>
-                  <span>•</span>
-                  <span>{cert.date}</span>
-                </div>
-              </div>
-              <a 
-                href={cert.verificationUrl} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:text-blue-600"
-              >
-                <ExternalLink size={16} />
-              </a>
-            </div>
-          ))}
-        </div>
+        <a 
+          href={cert.verificationUrl} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          <ExternalLink size={16} />
+        </a>
       </div>
+    ))}
+  </div>
+</div>
+      
     </div>
   );
 };
 
+// ThemeProvider Component
+const ThemeProvider = ({ children }) => {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setIsDark(true);
+    }
+    document.documentElement.classList.toggle('dark', isDark);
+  }, [isDark]);
+
+  return (
+    <div className={`${isDark ? 'dark' : ''}`}>
+      <button
+        onClick={() => setIsDark(!isDark)}
+        className="fixed top-6 right-6 z-50 p-2 rounded-full bg-gray-100 dark:bg-gray-800 
+                 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        aria-label="Toggle theme"
+      >
+        {isDark ? (
+          <Sun className="w-5 h-5 text-yellow-500" />
+        ) : (
+          <Moon className="w-5 h-5 text-gray-600" />
+        )}
+      </button>
+      {children}
+    </div>
+  );
+};
 
 // Page de détail du projet
 const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
@@ -643,97 +733,126 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
   const nextProject = PROJECTS[(currentIndex + 1) % PROJECTS.length];
   const prevProject = PROJECTS[(currentIndex - 1 + PROJECTS.length) % PROJECTS.length];
 
+  const buttonStyle = "flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-4 py-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-white";
+  const iconButtonStyle = "flex items-center justify-center bg-gray-100 dark:bg-gray-800 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-gray-800 dark:text-white";
+  const bottomButtonStyle = "flex items-center gap-3 bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-2xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors min-w-[200px] text-gray-800 dark:text-white";
+
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm">
-      {/* Header */}
-      <div className="relative h-64">
+    <div className="max-w-4xl mx-auto">
+      {/* Navigation Header */}
+      <div className="flex justify-between items-center mb-6">
+        <button 
+          onClick={onClose}
+          className={buttonStyle}
+        >
+          <Home className="w-4 h-4 text-gray-800 dark:text-white" />
+          <span>Retour</span>
+        </button>
+
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => onPrevProject(prevProject)}
+            className={iconButtonStyle}
+            title={prevProject.title}
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-800 dark:text-white" />
+          </button>
+          <button 
+            onClick={() => onNextProject(nextProject)}
+            className={iconButtonStyle}
+            title={nextProject.title}
+          >
+            <ChevronRight className="w-5 h-5 text-gray-800 dark:text-white" />
+          </button>
+        </div>
+      </div>
+
+      {/* Hero Image - Hauteur réduite */}
+      <div className="relative h-[300px] mb-8 rounded-xl overflow-hidden">
         <img 
           src={project.image} 
           alt={project.title} 
-          className="w-full h-full object-cover rounded-t-xl"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60 rounded-t-xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/70" />
         
-        {/* Navigation */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-          <button 
-            onClick={onClose}
-            className="flex items-center gap-2 bg-white/90 px-3 py-1.5 rounded-full text-sm hover:bg-white transition-colors"
-          >
-            <Home className="w-4 h-4" />
-            <span>Retour</span>
-          </button>
-        </div>
-        
-        {/* Project Title */}
-        <div className="absolute bottom-4 left-4 right-4">
-          <h1 className="text-2xl font-bold text-white mb-2">{project.title}</h1>
+        <div className="absolute bottom-6 left-6 right-6">
+          <h1 className="text-3xl font-bold text-white mb-3">{project.title}</h1>
           {project.context && (
-            <div className="flex items-center gap-2 text-white/90 text-sm">
-              <Clock className="w-4 h-4" />
-              <span>{project.context.duration}</span>
-              <span className="mx-2">•</span>
-              <span>{project.context.department}</span>
+            <div className="flex flex-wrap items-center gap-4 text-white/90">
+              <div className="flex items-center gap-2">
+                <Clock className="w-5 h-5 text-white" />
+                <span>{project.context.duration}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-white" />
+                <span>{project.context.department}</span>
+              </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Content */}
-      <div className="p-6 space-y-8">
+      {/* Content Sections - Espacement réduit */}
+      <div className="space-y-3">
+        {/* Le reste du code reste identique... */}
         {/* Technologies */}
-        <div>
-          <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-            <Package className="w-4 h-4 text-blue-500" />
+        <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+          <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+            <Package className="w-6 h-6 text-blue-500" />
             Technologies
           </h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {project.technologies.map((tech, index) => (
               <span 
                 key={index}
-                className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm"
+                className="bg-blue-50 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 
+                         px-4 py-2 rounded-xl text-sm font-medium"
               >
                 {tech}
               </span>
             ))}
           </div>
-        </div>
+        </section>
 
         {/* Challenges */}
         {project.challenges && (
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <Target className="w-4 h-4 text-orange-500" />
+          <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+            <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+              <Target className="w-6 h-6 text-orange-500" />
               Défis principaux
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-4">
               {project.challenges.map((challenge, index) => (
-                <div key={index} className="flex gap-3 items-start">
-                  <span className="bg-orange-100 text-orange-600 w-6 h-6 flex-shrink-0 flex items-center justify-center rounded-full text-sm">
+                <div key={index} className="flex gap-4 items-start">
+                  <span className="bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-300 
+                                w-8 h-8 flex-shrink-0 flex items-center justify-center rounded-xl font-medium">
                     {index + 1}
                   </span>
-                  <p className="text-gray-600 text-sm">{challenge}</p>
+                  <p className="text-gray-700 dark:text-gray-300">{challenge}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Method */}
+        {/* Methodology */}
         {project.methodology && (
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <GitBranch className="w-4 h-4 text-purple-500" />
-              Approche
+          <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+            <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+              <GitBranch className="w-6 h-6 text-purple-500" />
+              Approche méthodologique
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-6">
               {project.methodology.map((phase, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-lg">
-                  <h3 className="font-medium text-gray-800 mb-2">{phase.phase}</h3>
-                  <ul className="space-y-1">
+                <div key={index} className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl">
+                  <h3 className="font-semibold text-lg text-gray-800 dark:text-white mb-4">
+                    {phase.phase}
+                  </h3>
+                  <ul className="space-y-3">
                     {phase.tasks.map((task, taskIndex) => (
-                      <li key={taskIndex} className="text-sm text-gray-600 flex gap-2 items-center">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                      <li key={taskIndex} className="flex gap-3 items-start text-gray-600 dark:text-gray-300">
+                        <span className="w-1.5 h-1.5 bg-purple-400 dark:bg-purple-500 rounded-full mt-2" />
                         {task}
                       </li>
                     ))}
@@ -741,50 +860,85 @@ const ProjectDetail = ({ project, onClose, onNextProject, onPrevProject }) => {
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
         {/* Results */}
         {project.results && (
-          <div>
-            <h2 className="text-lg font-semibold flex items-center gap-2 mb-3">
-              <BarChart className="w-4 h-4 text-green-500" />
-              Résultats
-            </h2>
-            <div className="grid grid-cols-3 gap-4">
-              {project.results.map((result, index) => (
-                <div key={index} className="bg-green-50 p-4 rounded-lg">
-                  <p className="text-xl font-bold text-green-600 mb-1">{result.value}</p>
-                  <p className="text-sm text-gray-600">{result.description}</p>
+        <section className="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-sm">
+          <h2 className="text-2xl font-semibold flex items-center gap-3 mb-6 text-gray-800 dark:text-white">
+            <BarChart className="w-6 h-6 text-green-500" />
+            Résultats
+          </h2>
+          <div className="space-y-6">
+            {/* Métriques standards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {project.results.filter(result => !result.type).map((result, index) => (
+                <div key={index} className="p-6 bg-gray-50 dark:bg-gray-700/50 rounded-xl flex items-center gap-6">
+                  <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+                    {result.value}
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300">{result.description}</p>
                 </div>
               ))}
             </div>
+               {/* Images de résultats */}
+               {project.results.filter(result => result.type === "image").map((result, index) => (
+              <div key={index} className="mt-6">
+                <div className="overflow-hidden rounded-xl shadow-lg">
+                  <img 
+                    src={result.image}
+                    alt={result.caption}
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
+                <div className="mt-3">
+                  <h4 className="font-medium text-gray-800 dark:text-white mb-1">
+                    {result.caption}
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {result.description}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
+            
+
+
+          </section>
         )}
       </div>
 
       {/* Navigation Footer */}
-      <div className="border-t border-gray-100 p-4 flex justify-between items-center text-sm">
-        <button 
-          onClick={() => onPrevProject(prevProject)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          <span>{prevProject.title}</span>
-        </button>
-        
-        <button 
-          onClick={() => onNextProject(nextProject)}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
-        >
-          <span>{nextProject.title}</span>
-          <ChevronRight className="w-4 h-4" />
-        </button>
+      <div className="mt-8 py-6 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex justify-between items-center">
+          <button 
+            onClick={() => onPrevProject(prevProject)}
+            className={bottomButtonStyle}
+          >
+            <ChevronLeft className="w-5 h-5 text-gray-800 dark:text-white" />
+            <div className="text-left">
+              <div className="text-sm text-gray-500 dark:text-gray-400">Précédent</div>
+              <div className="font-medium text-gray-800 dark:text-gray-200 line-clamp-1">{prevProject.title}</div>
+            </div>
+          </button>
+          
+          <button 
+            onClick={() => onNextProject(nextProject)}
+            className={bottomButtonStyle}
+          >
+            <div className="text-right">
+              <div className="text-sm text-gray-500 dark:text-gray-400">Suivant</div>
+              <div className="font-medium text-gray-800 dark:text-gray-200 line-clamp-1">{nextProject.title}</div>
+            </div>
+            <ChevronRight className="w-5 h-5 text-gray-800 dark:text-white" />
+          </button>
+        </div>
       </div>
     </div>
   );
 };
-
 // Page d'accueil
 const HomePage = () => {
   return (
@@ -950,258 +1104,286 @@ Formation solide en data science et statistiques`
     }
   };
 
-  useEffect(() => {
-    if (isOpen) {
-      const initialMessage = {
-        id: 0,
-        type: 'bot',
-        text: 'Bonjour! Voici quelques questions suggérées, ou posez-moi directement votre question :',
-        withDelay: false
-      };
-      setMessages([
-        initialMessage,
-        { type: 'suggestion', questions: PREDEFINED_QA }
-      ]);
-    } else {
-      setMessages([]);
-      setRemainingQuestions(PREDEFINED_QA);
-    }
-  }, [isOpen]);
+ // Animations pour les messages
+ const fadeIn = "animate-[fadeIn_0.3s_ease-in-out]";
+ const slideIn = "animate-[slideIn_0.3s_ease-in-out]";
 
-  useEffect(() => {
-    if (isOpen) {
-      const initialMessage = {
-        id: 0,
-        type: 'bot',
-        text: 'Bonjour! Je suis là pour répondre à vos questions sur mon profil et mes compétences.',
-        withDelay: false
-      };
-      setMessages([initialMessage]);
-    } else {
-      setMessages([]);
-      setRemainingQuestions(PREDEFINED_QA);
-      setSuggestionsVisible(true);
-    }
-  }, [isOpen]);
+ useEffect(() => {
+   if (isOpen) {
+     const initialMessage = {
+       type: 'bot',
+       text: "👋 Bonjour ! Je suis l'assistant virtuel d'Antoine. Comment puis-je vous aider aujourd'hui ?",
+     };
+     setMessages([initialMessage]);
+   } else {
+     setMessages([]);
+     setRemainingQuestions(PREDEFINED_QA);
+     setSuggestionsVisible(true);
+   }
+ }, [isOpen]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, suggestionsVisible]);
+ useEffect(() => {
+   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+ }, [messages, suggestionsVisible]);
 
-  const handleQuestionClick = async (question, answer, id) => {
-    setSuggestionsVisible(false);
-    setMessages(prev => [
-      ...prev,
-      { type: 'user', text: question, withDelay: false },
-      { type: 'bot', text: answer, withDelay: true }
-    ]);
-    setRemainingQuestions(prev => prev.filter(q => q.id !== id));
-  };
+ const handleQuestionClick = async (question, answer, id) => {
+   setSuggestionsVisible(false);
+   setMessages(prev => [
+     ...prev,
+     { type: 'user', text: question },
+     { type: 'bot', text: answer }
+   ]);
+   setRemainingQuestions(prev => prev.filter(q => q.id !== id));
+ };
 
-  const handleUserInput = async () => {
-    if (userInput.trim() === '') return;
+ const handleUserInput = async () => {
+   if (userInput.trim() === '') return;
 
-    setSuggestionsVisible(false);
-    setMessages(prev => [...prev, { type: 'user', text: userInput, withDelay: false }]);
-    setIsTyping(true);
-    
-    try {
-      const aiResponse = await callOpenAI(userInput);
-      setMessages(prev => [
-        ...prev,
-        { type: 'bot', text: aiResponse, withDelay: true, aiGenerated: true }
-      ]);
-    } catch (error) {
-      console.error('Erreur:', error);
-    } finally {
-      setIsTyping(false);
-      setUserInput('');
-    }
-  };
+   setSuggestionsVisible(false);
+   setMessages(prev => [...prev, { type: 'user', text: userInput }]);
+   setIsTyping(true);
+   
+   try {
+     const aiResponse = await callOpenAI(userInput);
+     setMessages(prev => [...prev, { type: 'bot', text: aiResponse }]);
+   } catch (error) {
+     console.error('Erreur:', error);
+   } finally {
+     setIsTyping(false);
+     setUserInput('');
+   }
+ };
 
-  const TypingIndicator = () => (
-    <div className="flex items-center space-x-1 bg-gray-100 p-2 rounded-lg self-start">
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-100"></div>
-      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce delay-200"></div>
-    </div>
-  );
+ const TypingIndicator = () => (
+   <div className="flex space-x-2 p-3 bg-gray-100 rounded-lg max-w-[200px]">
+     <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0s" }} />
+     <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }} />
+     <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }} />
+   </div>
+ );
 
-  return (
-    <div className="fixed bottom-4 right-4 z-50">
-      <div className={`
-        relative transition-all duration-300 ease-in-out
-        ${isOpen ? 'w-[380px] h-[500px]' : 'w-14 h-14'}
-      `}>
-        {/* Bouton chatbot fermé */}
-        {!isOpen && (
-          <button 
-            onClick={() => setIsOpen(true)}
-            className="absolute bottom-0 right-0 bg-blue-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-600 transition-colors"
-          >
-            <MessageSquare className="w-6 h-6" />
-          </button>
-        )}
+ return (
+   <div className="fixed bottom-6 right-6 z-50">
+     <div className={`
+       transform transition-all duration-300 ease-in-out
+       ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}
+       ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}
+     `}>
+       {isOpen && (
+         <div className="w-[400px] h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+           {/* Header */}
+           <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 flex items-center justify-between">
+             <div className="flex items-center space-x-3">
+               <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
+                 <Bot className="w-6 h-6 text-white" />
+               </div>
+               <div>
+                 <h3 className="text-white font-semibold">Assistant IA</h3>
+                 <p className="text-blue-100 text-xs">Propulsé par GPT-4</p>
+               </div>
+             </div>
+             <button 
+               onClick={() => setIsOpen(false)}
+               className="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+             >
+               <X className="w-5 h-5" />
+             </button>
+           </div>
 
-        {/* Chatbot ouvert */}
-        {isOpen && (
-          <div className="absolute bottom-0 right-0 w-full h-full bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-            {/* Header */}
-            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 flex justify-between items-center">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Bot className="w-5 h-5" />
-                  <h3 className="font-bold text-sm">Assistant IA</h3>
-                </div>
-                <p className="text-xs text-blue-100 mt-1">Propulsé par GPT-4</p>
-              </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-blue-600/50 p-1 rounded-full transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+           {/* Messages */}
+           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+             {messages.map((message, index) => (
+               <div
+                 key={index}
+                 className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} ${fadeIn}`}
+               >
+                 <div className={`
+                   flex items-start space-x-2 max-w-[80%]
+                   ${message.type === 'user' ? 'flex-row-reverse space-x-reverse' : 'flex-row'}
+                 `}>
+                   <div className={`
+                     w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0
+                     ${message.type === 'user' ? 'bg-blue-100' : 'bg-white'}
+                   `}>
+                     {message.type === 'user' ? 
+                       <User className="w-5 h-5 text-blue-600" /> : 
+                       <Bot className="w-5 h-5 text-gray-600" />
+                     }
+                   </div>
+                   <div className={`
+                     py-2 px-4 rounded-2xl shadow-sm
+                     ${message.type === 'user' 
+                       ? 'bg-blue-600 text-white rounded-br-none' 
+                       : 'bg-white text-gray-800 rounded-bl-none'}
+                   `}>
+                     <p className="text-sm">{message.text}</p>
+                   </div>
+                 </div>
+               </div>
+             ))}
+             {isTyping && <TypingIndicator />}
+             <div ref={messagesEndRef} />
+           </div>
 
-            {/* Zone de messages */}
-            <div className="flex-grow overflow-y-auto p-4 space-y-3">
-              {messages.map((message, index) => (
-                <div key={index} className={`flex gap-2 items-start ${message.type === 'user' ? 'flex-row-reverse' : ''}`}>
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    message.type === 'user' ? 'bg-blue-100' : 'bg-gray-100'
-                  }`}>
-                    {message.type === 'user' ? 
-                      <User className="w-4 h-4 text-blue-600" /> : 
-                      <Bot className="w-4 h-4 text-gray-600" />
-                    }
-                  </div>
-                  <div className={`
-                    max-w-[70%] p-3 rounded-lg text-sm
-                    ${message.type === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'}
-                    ${message.withDelay ? 'animate-fade-in' : ''}
-                  `}>
-                    {message.text}
-                  </div>
-                </div>
-              ))}
-              {isTyping && <TypingIndicator />}
-              <div ref={messagesEndRef} />
-            </div>
+           {/* Suggestions */}
+           {remainingQuestions.length > 0 && (
+             <div className="border-t border-gray-100 bg-white">
+               <button
+                 onClick={() => setSuggestionsVisible(!suggestionsVisible)}
+                 className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+               >
+                 <span className="text-sm font-medium">Questions suggérées ({remainingQuestions.length})</span>
+                 {suggestionsVisible ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+               </button>
+               {suggestionsVisible && (
+                 <div className="max-h-40 overflow-y-auto p-3 bg-gray-50 space-y-2">
+                   {remainingQuestions.map((q) => (
+                     <button
+                       key={q.id}
+                       onClick={() => handleQuestionClick(q.question, q.answer, q.id)}
+                       className="w-full text-left p-3 rounded-xl bg-white hover:bg-blue-50 
+                                transition-colors text-sm text-gray-700 shadow-sm hover:shadow
+                                border border-gray-100 hover:border-blue-100"
+                     >
+                       {q.question}
+                     </button>
+                   ))}
+                 </div>
+               )}
+             </div>
+           )}
 
-            {/* Questions suggérées rétractables */}
-            {remainingQuestions.length > 0 && (
-              <div className="border-t border-gray-100">
-                <button
-                  onClick={() => setSuggestionsVisible(!suggestionsVisible)}
-                  className="w-full flex items-center justify-between p-2 text-sm text-gray-600 hover:bg-gray-50"
-                >
-                  <span>Questions suggérées ({remainingQuestions.length})</span>
-                  {suggestionsVisible ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
-                </button>
-                {suggestionsVisible && (
-                  <div className="max-h-32 overflow-y-auto p-2 bg-gray-50">
-                    <div className="grid grid-cols-1 gap-2">
-                      {remainingQuestions.map((q) => (
-                        <button
-                          key={q.id}
-                          onClick={() => handleQuestionClick(q.question, q.answer, q.id)}
-                          className="text-left bg-white text-gray-700 px-3 py-2 rounded-lg hover:bg-blue-50 transition-colors text-xs border border-gray-100"
-                        >
-                          {q.question}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+           {/* Input */}
+           <div className="p-4 bg-white border-t border-gray-100">
+             <div className="flex items-center space-x-2 bg-gray-50 rounded-xl border border-gray-200 focus-within:border-blue-400 transition-colors p-2">
+               <input
+                 type="text"
+                 value={userInput}
+                 onChange={(e) => setUserInput(e.target.value)}
+                 onKeyPress={(e) => e.key === 'Enter' && handleUserInput()}
+                 placeholder="Posez votre question..."
+                 className="flex-1 bg-transparent text-sm focus:outline-none px-2 text-gray-700 placeholder-gray-400"
+               />
+               <button 
+                 onClick={handleUserInput}
+                 className="p-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors
+                          disabled:opacity-50 disabled:cursor-not-allowed"
+                 disabled={!userInput.trim()}
+               >
+                 <Send className="w-4 h-4" />
+               </button>
+             </div>
+           </div>
+         </div>
+       )}
+     </div>
 
-            {/* Input utilisateur */}
-            <div className="p-4 border-t border-gray-100">
-              <div className="flex items-center bg-gray-50 rounded-lg border border-gray-200 p-2">
-                <input
-                  type="text"
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleUserInput()}
-                  placeholder="Posez votre question..."
-                  className="flex-grow bg-transparent text-sm focus:outline-none px-2"
-                />
-                <button 
-                  onClick={handleUserInput}
-                  className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  <Send size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
+     {/* Toggle button */}
+     <button 
+       onClick={() => setIsOpen(!isOpen)}
+       className={`
+         fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg
+         flex items-center justify-center transition-all duration-300
+         ${isOpen 
+           ? 'scale-0 opacity-0' 
+           : 'scale-100 opacity-100 bg-blue-600 hover:bg-blue-700 text-white'
+         }
+       `}
+     >
+       <MessageSquare className="w-6 h-6" />
+     </button>
+   </div>
+ );
 };
 
 
 // Composant principal
+
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedProject, setSelectedProject] = useState(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleProjectClick = (project) => {
     setSelectedProject(project);
     setCurrentPage('project-detail');
   };
 
-  const handleNextProject = (project) => {
-    setSelectedProject(project);
-  };
-
-  const handlePrevProject = (project) => {
-    setSelectedProject(project);
-  };
-
-  const renderContent = () => {
-    switch (currentPage) {
-      case 'home':
-        return (
-          <div className="space-y-8">
-            <section className="mb-12 bg-gray-100 p-6 rounded-lg">
-              <h3 className="text-3xl font-bold mb-4 border-b-2 border-gray-200 pb-3">Data Analyst</h3>
-              <p className="font-bold text-gray-800 mb-4">Power BI | Data Visualisation | Machine Learning | Python</p>
-              <p className="text-gray-700">{PROFILE.description}</p>
-            </section>
-            
-            <Projects onProjectClick={handleProjectClick} />
-            <Skills />
-          </div>
-        );
-  
-      case 'project-detail':
-        return (
-          <ProjectDetail 
-            project={selectedProject} 
-            onClose={() => setCurrentPage('home')}
-            onNextProject={handleNextProject}
-            onPrevProject={handlePrevProject}
-          />
-        );
-      default:
-        return null;
-    }
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <div className="fixed left-0 top-0 w-1/3 h-full">
-        <ProfileSidebar />
+    <ThemeProvider>
+      <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+        {/* Barre latérale */}
+        <div
+          className={`fixed top-0 left-0 h-full transition-all duration-300 ${
+            isSidebarCollapsed ? 'w-16' : 'w-1/3'
+          }`}
+        >
+          {/* Contenu de la barre latérale */}
+          <div className="h-full bg-gradient-to-b from-blue-50 dark:from-blue-900 to-white dark:to-gray-900">
+            {!isSidebarCollapsed && <ProfileSidebar />}
+            
+            {/* Bouton de toggle intégré dans la sidebar */}
+            <button
+              onClick={toggleSidebar}
+              className={`absolute top-1/2 -right-4 z-50 p-2 rounded-full bg-gray-100 
+                         dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 
+                         transition-colors shadow-lg`}
+              aria-label="Toggle sidebar"
+            >
+              {isSidebarCollapsed ? (
+                <ChevronRight className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              ) : (
+                <ChevronLeft className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+              )}
+            </button>
+          </div>
+
+          {/* Bandeau réduit */}
+          {isSidebarCollapsed && (
+  <div className="h-full w-16 
+                  bg-gradient-to-b from-blue-100 dark:from-blue-950 
+                  to-white dark:to-gray-900" />
+)}
+        </div>
+
+        {/* Contenu principal avec marges ajustées */}
+        <div
+          className={`flex-1 transition-all duration-300 ${
+            isSidebarCollapsed 
+              ? 'ml-16 px-16' 
+              : 'ml-[33.33%] pr-24 pl-16'
+          } py-10`}
+        >
+          {currentPage === 'home' ? (
+            <div className="space-y-8 w-full max-w-6xl mx-auto">
+              <section className="mb-12 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg">
+                <h3 className="text-3xl font-bold mb-4 border-b-2 border-gray-200 dark:border-gray-700 pb-3 text-gray-800 dark:text-white">
+                  Data Analyst
+                </h3>
+                <p className="font-bold text-gray-800 dark:text-gray-200 mb-4">
+                  Power BI | Data Visualisation | Machine Learning | Python
+                </p>
+                <p className="text-gray-700 dark:text-gray-300">{PROFILE.description}</p>
+              </section>
+              <Projects onProjectClick={handleProjectClick} />
+              <Skills />
+            </div>
+          ) : (
+            <ProjectDetail
+              project={selectedProject}
+              onClose={() => setCurrentPage('home')}
+              onNextProject={setSelectedProject}
+              onPrevProject={setSelectedProject}
+            />
+          )}
+        </div>
+        <Chatbot />
       </div>
-      
-      <div className="w-2/3 ml-auto px-20 py-10">
-        {renderContent()}
-      </div>
-      <Chatbot />
-    </div>
+    </ThemeProvider>
   );
 };
 
