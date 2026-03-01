@@ -17,6 +17,40 @@ const PROFILE = {
   description: 'Passionné par la data, je transforme des données brutes en insights stratégiques. Mon expertise allie analyse technique et vision business.'
 };
 
+const TypewriterTitle = () => {
+  const titles = ['Data Analyst', 'Power BI Expert', 'Machine Learning', 'Data Scientist'];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    const currentTitle = titles[currentIndex];
+    if (isPaused) {
+      const t = setTimeout(() => { setIsPaused(false); setIsDeleting(true); }, 1800);
+      return () => clearTimeout(t);
+    }
+    if (!isDeleting && displayed.length < currentTitle.length) {
+      const t = setTimeout(() => setDisplayed(currentTitle.slice(0, displayed.length + 1)), 80);
+      return () => clearTimeout(t);
+    }
+    if (!isDeleting && displayed.length === currentTitle.length) { setIsPaused(true); return; }
+    if (isDeleting && displayed.length > 0) {
+      const t = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 45);
+      return () => clearTimeout(t);
+    }
+    if (isDeleting && displayed.length === 0) { setIsDeleting(false); setCurrentIndex(p => (p + 1) % titles.length); }
+  }, [displayed, isDeleting, isPaused, currentIndex]);
+
+  return (
+    <span className="inline-flex items-center gap-1">
+      <span className="text-blue-600 dark:text-blue-400">{displayed}</span>
+      <span className="inline-block w-[2px] h-8 bg-blue-500 ml-0.5" style={{ animation: 'blink 1s step-end infinite' }} />
+      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+    </span>
+  );
+};
+
 // Composant Profil
 const ProfileSidebar = () => {
   return (
@@ -24,6 +58,8 @@ const ProfileSidebar = () => {
                 bg-gradient-to-b from-blue-100 dark:from-blue-950 
                 to-white dark:to-gray-900 
                 flex flex-col transition-colors duration-200">
+
+      
 
       <div className="flex-grow flex items-center justify-center">
         <div className="text-center">
