@@ -1011,6 +1011,7 @@ const Chatbot = () => {
   // Configuration OpenAI
   
   const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
+const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY;
 
   const callOpenAI = async (userMessage) => {
     try {
